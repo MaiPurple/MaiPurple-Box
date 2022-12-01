@@ -3,16 +3,170 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MaiPurple_Box"
+        xmlns:local="clr-namespace:MaiPurple_Box"        
+        xmlns:Sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="MaiPurple-Box" Height="480" Width="960" Activated="Window_Activated">
-    <Grid>
-        <hc:SideMenu x:Name="Menu" Margin="0,0,740,0" >
-            <hc:Interaction.Triggers>
-                <hc:EventTrigger EventName="SelectionChanged">
-                    <hc:EventToCommand Command="{Binding SwitchItemCmd}" PassEventArgsToCommand="True" />
-                </hc:EventTrigger>
-            </hc:Interaction.Triggers>
-        </hc:SideMenu>
+        Title="MaiPurple-Box" Height="600" Width="1000" WindowStyle="None" ResizeMode="NoResize" AllowsTransparency="True" Background="Transparent">
+    <Window.Resources>
+        <ControlTemplate x:Key="ExitButton" >
+            <Grid>
+                <Rectangle  Height="45" Width="45">
+                    <Rectangle.Fill>
+                        <ImageBrush Stretch="Uniform" ImageSource="/assets/closewhite.png" ></ImageBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Grid>
+        </ControlTemplate>
+        <ControlTemplate x:Key="MinimizedButton" >
+            <Grid>
+                <Rectangle  Height="45" Width="45">
+                    <Rectangle.Fill>
+                        <ImageBrush Stretch="Uniform" ImageSource="/assets/hyphen3.png" ></ImageBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+            </Grid>
+        </ControlTemplate>
+        <Sys:Double x:Key="WindowSizeHeight">600</Sys:Double>
+        <Sys:Double x:Key="WindowSizeWidth">1000</Sys:Double>
+        <Sys:Double x:Key="GridRightRow">10</Sys:Double>
+        <Sys:Double x:Key="GridLeftRow">70</Sys:Double>
+        <Sys:Double x:Key="GlobalRadius">15</Sys:Double>
+        <Sys:Double x:Key="ButtonRadius">10</Sys:Double>
+        <Sys:Double x:Key="MenuWidth">240</Sys:Double>
+        <Sys:Double x:Key="MenuButtonHeight">80</Sys:Double>
+        <Sys:Double x:Key="MenuRadius">15</Sys:Double>
+        <Sys:Double x:Key="LeftColumnButtonHeight">70</Sys:Double>
+        <Sys:Double x:Key="LeftColumnButtonWidth">180</Sys:Double>
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="Button.Static.Background" Color="Transparent"/>
+        <SolidColorBrush x:Key="Button.Static.Border" Color="White"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
+        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
+        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FF2C628A"/>
+        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628A"/>
+        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
+        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
+        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
+        <Style x:Key="MenuButtonTemplate" TargetType="{x:Type Button}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="3"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border x:Name="border" CornerRadius="{Binding Source={StaticResource ButtonRadius}}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
+                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDefaulted" Value="true">
+                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
+                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Background="Transparent">
+        <Rectangle Height="{Binding Source={StaticResource WindowSizeHeight}}" Width="{Binding Source={StaticResource WindowSizeWidth}}" RadiusX="{Binding Source={StaticResource GlobalRadius}}" RadiusY="{Binding Source={StaticResource GlobalRadius}}" VerticalAlignment="Center">
+            <Rectangle.Fill>
+                <ImageBrush ImageSource="/assets/background-test.jpg" Stretch="UniformToFill"/>
+            </Rectangle.Fill>
+        </Rectangle>
+        <Border Background="Transparent" CornerRadius="{Binding Source={StaticResource GlobalRadius}}" BorderThickness="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="25" />
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="60"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="2" Background="#01FFFFFF" MouseDown="Grid_MouseDown">
+                        <TextBlock x:Name="TITLE" Text="MaiPurple-Box" Foreground="White" FontSize="36" Visibility="Visible" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Grid>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="{Binding Source={StaticResource MenuWidth}}"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="1" CornerRadius="{Binding Source={StaticResource MenuRadius}}" Background="White" Opacity="0.35" />
+                    <Grid Grid.Column="1">
+                        
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="{Binding Source={StaticResource MenuButtonHeight}}"/>
+                            <RowDefinition Height="{Binding Source={StaticResource MenuButtonHeight}}"/>
+                            <RowDefinition Height="{Binding Source={StaticResource MenuButtonHeight}}"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="120"/>
+                            <RowDefinition Height="{Binding Source={StaticResource MenuButtonHeight}}"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Button Style="{DynamicResource MenuButtonTemplate}" Background="Transparent" Height="{Binding Source={StaticResource LeftColumnButtonHeight}}" Width="{Binding Source={StaticResource LeftColumnButtonWidth}}">
+                                <Button.Content>
+                                    <TextBlock Text="占位" FontSize="20" FontWeight="Bold" Foreground="White" />
+                                </Button.Content>
+                            </Button>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Button Style="{DynamicResource MenuButtonTemplate}" Background="Transparent" Height="{Binding Source={StaticResource LeftColumnButtonHeight}}" Width="{Binding Source={StaticResource LeftColumnButtonWidth}}">
+                                <Button.Content>
+                                    <TextBlock Text="占位" FontSize="20" FontWeight="Bold" Foreground="White" />
+                                </Button.Content>
+                            </Button>
+                        </Grid>
+                        <Grid Grid.Row="2">
+                            <Button Style="{DynamicResource MenuButtonTemplate}" Background="Transparent" Height="{Binding Source={StaticResource LeftColumnButtonHeight}}" Width="{Binding Source={StaticResource LeftColumnButtonWidth}}">
+                                <Button.Content>
+                                    <TextBlock Text="占位" FontSize="20" FontWeight="Bold" Foreground="White" />
+                                </Button.Content>
+                            </Button>
+                        </Grid>
+                        <Grid Grid.Row="4">
+                            <TextBlock Foreground="White" Text="占位"></TextBlock>
+                        </Grid>
+                        <Grid Grid.Row="5">
+                            <TextBlock Foreground="White" Text="占位"></TextBlock>
+                        </Grid>
+                    </Grid>
+
+                </Grid>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace MaiPurple_Box
 {
@@ -24,13 +25,12 @@ namespace MaiPurple_Box
         {
             InitializeComponent();
         }
-
-        private void Window_Activated(object sender, EventArgs e)
+        private void Grid_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            this.Menu.DataContext = new List<string>
-            {
-                "1","2","3","4"
-            };
+            this.DragMove();
+            // 设置此属性可以防止拖动到屏幕边缘，窗体最大化
+            this.ResizeMode = ResizeMode.NoResize;
         }
+
     }
 }
