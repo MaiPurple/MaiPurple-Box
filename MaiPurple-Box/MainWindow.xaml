@@ -7,6 +7,15 @@
         xmlns:Sys="clr-namespace:System;assembly=mscorlib"
         mc:Ignorable="d"
         Title="MaiPurple-Box" Height="600" Width="1000" WindowStyle="None" ResizeMode="NoResize" AllowsTransparency="True" Background="Transparent">
+    <Window.Triggers>
+    <EventTrigger RoutedEvent="Window.Loaded" >
+        <BeginStoryboard>
+            <Storyboard>
+                <DoubleAnimation Duration="00:00:01" Storyboard.TargetProperty="Opacity" From="0" To="1" />
+            </Storyboard>
+        </BeginStoryboard>
+    </EventTrigger>
+</Window.Triggers>
     <Window.Resources>
         <ControlTemplate x:Key="ExitButton" >
             <Grid>
