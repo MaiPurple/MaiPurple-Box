@@ -1,4 +1,4 @@
-﻿namespace MaiPurple.KusuLib.Menu;
+﻿namespace MaiPurple.KusuLib.Enum;
 
 public enum FileSizeUnit
 {

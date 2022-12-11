@@ -5,7 +5,7 @@ using MaiPurple.KusuLib.Model;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MaiPurple.KusuLib.Menu;
+using MaiPurple.KusuLib.Enum;
 
 namespace MaiPurple.KusuLib
 {
@@ -14,74 +14,38 @@ namespace MaiPurple.KusuLib
     /// </summary>
     public class SystemInfo
     {
+        private PerformanceCounter _cpuCounter = new("Processor", "% Processor Time", "_Total") { MachineName = "." };
+
+        private ManagementClass _memoryManager = new("Win32_PerfFormattedData_PerfOS_Memory");
+
+        private ManagementClass _totalMemoryManager = new("Win32_PhysicalMemory");
+
         /// <summary>
-        /// CPU信息
+        /// 获取CPU占用率
         /// </summary>
-        private List<PerformanceCounter> _cpuCounters { get; set; } = new();
-
-        private object CpuValueLock { get; set; } = new();
-
-        public SystemInfo()
-        {
-            // 初始化CPU信息
-            InitCpuCounters();
-        }
-
+        public double CpuUsage => GetCpuUsage();
 
         /// <summary>
-        /// 初始化CPU信息
-        /// </summary>
-        private void InitCpuCounters()
-        {
-            for (var i = 0; i < Environment.ProcessorCount; i++)
-            {
-                var item = new PerformanceCounter("Processor", "% Processor Time", i.ToString());
-                _cpuCounters.Add(item);
-                _cpuCounters.Last().NextValue();
-            }
-        }
-
-        // public double GetCpuUsage2()
-        // {
-        //     var counter = new PerformanceCounter("Processor", "% Processor Time", "_Total", true);
-        //     
-        // }
-
-
-        public double GetCpuUsage()
-        {
-            var value = (double)0;
-            var options = new ParallelOptions();
-            options.MaxDegreeOfParallelism = _cpuCounters.Count;
-            Parallel.ForEach(_cpuCounters, options, item =>
-            {
-                lock (CpuValueLock)
-                {
-                    Console.Write(item.NextValue() + "         ");
-                    value += item.NextValue();
-                }
-            });
-
-            return Math.Round(value / _cpuCounters.Count, 2);
-        }
-
-
-        /// <summary>
-        /// 总物理内存
+        /// 总物理内存（单位GB）
         /// </summary>
         /// <returns></returns>
         public double TotalPhysicalMemory => ToFileFormat(GetTotalPhysicalMemory(), FileSizeUnit.GB);
 
         /// <summary>
-        /// 已用内存
+        /// 已用内存（单位GB）
         /// </summary>
         /// <returns></returns>
         public double AvailablePhysicalMemory => ToFileFormat(GetAvailablePhysicalMemory(), FileSizeUnit.GB);
 
         /// <summary>
-        /// 获取CPU占用率
+        /// 获取CPU占用
         /// </summary>
-        public double CPUOccupancy => GetCpuOccupancy();
+        /// <returns></returns>
+        private double GetCpuUsage()
+        {
+            var value = _cpuCounter.NextValue();
+            return Math.Round(value, 2);
+        }
 
 
         /// <summary>
@@ -93,7 +57,7 @@ namespace MaiPurple.KusuLib
             long capacity = 0;
             try
             {
-                foreach (var o in new ManagementClass("Win32_PhysicalMemory").GetInstances())
+                foreach (var o in _totalMemoryManager.GetInstances())
                 {
                     var mo1 = (ManagementObject)o;
                     capacity += long.Parse(mo1.Properties["Capacity"].Value.ToString());
@@ -117,7 +81,7 @@ namespace MaiPurple.KusuLib
             long capacity = 0;
             try
             {
-                foreach (var o in new ManagementClass("Win32_PerfFormattedData_PerfOS_Memory").GetInstances())
+                foreach (var o in _memoryManager.GetInstances())
                 {
                     var mo1 = (ManagementObject)o;
                     capacity += long.Parse(mo1.Properties["AvailableBytes"].Value.ToString());
@@ -131,19 +95,6 @@ namespace MaiPurple.KusuLib
 
             return capacity;
         }
-
-
-        private long GetCpuOccupancy()
-        {
-            var searcher = new ManagementObjectSearcher("select * from Win32_PerfFormattedData_PerfOS_Processor");
-            var cpuTimes = searcher.Get().Cast<ManagementObject>()
-                .Select(mo => new { Name = mo["Name"], Usage = mo["PercentProcessorTime"] })
-                .ToList();
-
-            var usage = cpuTimes.FirstOrDefault(x => x.Name.ToString() == "_Total")?.Usage ?? 0;
-            return Convert.ToInt64(usage);
-        }
-
 
         /// <summary>
         /// 根据指定的文件大小单位，对输入的文件大小（字节表示）进行转换。
