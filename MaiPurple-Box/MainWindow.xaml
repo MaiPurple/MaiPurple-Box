@@ -8,15 +8,16 @@
         mc:Ignorable="d"
         Title="MaiPurple-Box" Height="600" Width="1000" WindowStyle="None" ResizeMode="NoResize" AllowsTransparency="True" Background="Transparent">
     <Window.Triggers>
-    <EventTrigger RoutedEvent="Window.Loaded" >
-        <BeginStoryboard>
-            <Storyboard>
-                <DoubleAnimation Duration="00:00:01" Storyboard.TargetProperty="Opacity" From="0" To="1" />
-            </Storyboard>
-        </BeginStoryboard>
-    </EventTrigger>
-</Window.Triggers>
+        <EventTrigger RoutedEvent="Window.Loaded" >
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Duration="00:00:01" Storyboard.TargetProperty="Opacity" From="0" To="1" />
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </Window.Triggers>
     <Window.Resources>
+
         <ControlTemplate x:Key="ExitButton" >
             <Grid>
                 <Rectangle  Height="45" Width="45">
@@ -40,67 +41,10 @@
         <Sys:Double x:Key="GridRightRow">10</Sys:Double>
         <Sys:Double x:Key="GridLeftRow">70</Sys:Double>
         <Sys:Double x:Key="GlobalRadius">15</Sys:Double>
-        <Sys:Double x:Key="ButtonRadius">10</Sys:Double>
         <Sys:Double x:Key="MenuWidth">240</Sys:Double>
-        <Sys:Double x:Key="MenuButtonHeight">80</Sys:Double>
+        <Sys:Double x:Key="MenuButtonHeight">50</Sys:Double>
         <Sys:Double x:Key="MenuRadius">15</Sys:Double>
-        <Sys:Double x:Key="LeftColumnButtonHeight">70</Sys:Double>
-        <Sys:Double x:Key="LeftColumnButtonWidth">180</Sys:Double>
-        <Style x:Key="FocusVisual">
-            <Setter Property="Control.Template">
-                <Setter.Value>
-                    <ControlTemplate>
-                        <Rectangle Margin="2" StrokeDashArray="1 2" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" SnapsToDevicePixels="true" StrokeThickness="1"/>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <SolidColorBrush x:Key="Button.Static.Background" Color="Transparent"/>
-        <SolidColorBrush x:Key="Button.Static.Border" Color="White"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Background" Color="#FFBEE6FD"/>
-        <SolidColorBrush x:Key="Button.MouseOver.Border" Color="#FF3C7FB1"/>
-        <SolidColorBrush x:Key="Button.Pressed.Background" Color="#FF2C628A"/>
-        <SolidColorBrush x:Key="Button.Pressed.Border" Color="#FF2C628A"/>
-        <SolidColorBrush x:Key="Button.Disabled.Background" Color="#FFF4F4F4"/>
-        <SolidColorBrush x:Key="Button.Disabled.Border" Color="#FFADB2B5"/>
-        <SolidColorBrush x:Key="Button.Disabled.Foreground" Color="#FF838383"/>
-        <Style x:Key="MenuButtonTemplate" TargetType="{x:Type Button}">
-            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-            <Setter Property="Background" Value="{StaticResource Button.Static.Background}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource Button.Static.Border}"/>
-            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-            <Setter Property="BorderThickness" Value="3"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="1"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type Button}">
-                        <Border x:Name="border" CornerRadius="{Binding Source={StaticResource ButtonRadius}}" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="true">
-                            <ContentPresenter x:Name="contentPresenter" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsDefaulted" Value="true">
-                                <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource {x:Static SystemColors.HighlightBrushKey}}"/>
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.MouseOver.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.MouseOver.Border}"/>
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="true">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Pressed.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Pressed.Border}"/>
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="false">
-                                <Setter Property="Background" TargetName="border" Value="{StaticResource Button.Disabled.Background}"/>
-                                <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource Button.Disabled.Border}"/>
-                                <Setter Property="TextElement.Foreground" TargetName="contentPresenter" Value="{StaticResource Button.Disabled.Foreground}"/>
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+
     </Window.Resources>
     <Grid Background="Transparent">
         <Rectangle Height="{Binding Source={StaticResource WindowSizeHeight}}" Width="{Binding Source={StaticResource WindowSizeWidth}}" RadiusX="{Binding Source={StaticResource GlobalRadius}}" RadiusY="{Binding Source={StaticResource GlobalRadius}}" VerticalAlignment="Center">
@@ -112,8 +56,8 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="60" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="25" />
+                    <RowDefinition />
+                    <RowDefinition Height="5"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
@@ -129,48 +73,46 @@
                 </Grid>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="{Binding Source={StaticResource MenuWidth}}"/>
-                        <ColumnDefinition Width="10"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="{Binding Source={ StaticResource MenuWidth }}"/>
+                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Border Grid.Column="1" CornerRadius="{Binding Source={StaticResource MenuRadius}}" Background="White" Opacity="0.35" />
-                    <Grid Grid.Column="1">
-                        
+                    <Border Grid.Column="1" CornerRadius="{Binding Source={StaticResource MenuRadius}}" Background="White" Padding="10,10,10,10" Opacity="0.3" Margin="0,0,0,-1" />
+                    <Grid Grid.Column="1" Margin="5">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="{Binding Source={StaticResource MenuButtonHeight}}" />
                             <RowDefinition Height="{Binding Source={StaticResource MenuButtonHeight}}"/>
                             <RowDefinition Height="{Binding Source={StaticResource MenuButtonHeight}}"/>
-                            <RowDefinition Height="{Binding Source={StaticResource MenuButtonHeight}}"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="120"/>
                             <RowDefinition Height="{Binding Source={StaticResource MenuButtonHeight}}"/>
                         </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Button Style="{DynamicResource MenuButtonTemplate}" Background="Transparent" Height="{Binding Source={StaticResource LeftColumnButtonHeight}}" Width="{Binding Source={StaticResource LeftColumnButtonWidth}}">
+                        <Grid Grid.Row="0" Margin="0,0,0,5">
+                            <Button Style="{DynamicResource MenuButtonTemplate}" >
                                 <Button.Content>
-                                    <TextBlock Text="占位" FontSize="20" FontWeight="Bold" Foreground="White" />
+                                    <TextBlock Text="MC服务" FontSize="20" FontWeight="Bold" Foreground="White" />
                                 </Button.Content>
                             </Button>
                         </Grid>
-                        <Grid Grid.Row="1">
-                            <Button Style="{DynamicResource MenuButtonTemplate}" Background="Transparent" Height="{Binding Source={StaticResource LeftColumnButtonHeight}}" Width="{Binding Source={StaticResource LeftColumnButtonWidth}}">
+                        <Grid Grid.Row="1" Margin="0,0,0,5">
+                            <Button Style="{DynamicResource MenuButtonTemplate}" >
                                 <Button.Content>
-                                    <TextBlock Text="占位" FontSize="20" FontWeight="Bold" Foreground="White" />
+                                    <TextBlock Text="服务端" FontSize="20" FontWeight="Bold" Foreground="White" />
                                 </Button.Content>
                             </Button>
                         </Grid>
-                        <Grid Grid.Row="2">
-                            <Button Style="{DynamicResource MenuButtonTemplate}" Background="Transparent" Height="{Binding Source={StaticResource LeftColumnButtonHeight}}" Width="{Binding Source={StaticResource LeftColumnButtonWidth}}">
+                        <Grid Grid.Row="2" Margin="0,0,0,5">
+                            <Button Style="{DynamicResource MenuButtonTemplate}" >
                                 <Button.Content>
-                                    <TextBlock Text="占位" FontSize="20" FontWeight="Bold" Foreground="White" />
+                                    <TextBlock Text="服务端" FontSize="20" FontWeight="Bold" Foreground="White" />
                                 </Button.Content>
                             </Button>
                         </Grid>
-                        <Grid Grid.Row="4">
-                            <TextBlock Foreground="White" Text="占位"></TextBlock>
-                        </Grid>
-                        <Grid Grid.Row="5">
-                            <TextBlock Foreground="White" Text="占位"></TextBlock>
+                        <Grid Grid.Row="3" Margin="0,0,0,5">
+                            <Button Style="{DynamicResource MenuButtonTemplate}" >
+                                <Button.Content>
+                                    <TextBlock Text="服务端" FontSize="20" FontWeight="Bold" Foreground="White" />
+                                </Button.Content>
+                            </Button>
                         </Grid>
                     </Grid>
 
